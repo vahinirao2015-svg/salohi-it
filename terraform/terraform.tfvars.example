@@ -1,5 +1,5 @@
 aws_region      = "ap-south-1"
-allowed_cidr    = "157.35.95.32/32"
+allowed_cidr    = "0.0.0.0/0"
 db_password     = "maple123456789"
 instance_type   = "m7i-flex.large"
 ssh_public_key  = ""
