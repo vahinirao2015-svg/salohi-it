@@ -17,11 +17,11 @@
     </div>
   </div>
   <ul class="menu">
-    <li><a th:href="@{/}" th:classappend="${#request.servletPath == '/'} ? 'active'">Dashboard</a></li>
-    <li><a th:href="@{/leaves}" th:classappend="${#strings.startsWith(#request.servletPath, '/leaves')} ? 'active'">Leave</a></li>
-    <li><a th:href="@{/attendance}" th:classappend="${#strings.startsWith(#request.servletPath, '/attendance')} ? 'active'">Attendance</a></li>
-    <li><a th:href="@{/payslips}" th:classappend="${#strings.startsWith(#request.servletPath, '/payslips')} ? 'active'">Payslips</a></li>
-    <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/employees}" th:classappend="${#strings.startsWith(#request.servletPath, '/admin/employees')} ? 'active'">People</a></li>
+    <li><a th:href="@{/}" th:classappend="${path == '/'} ? 'active'">Dashboard</a></li>
+    <li><a th:href="@{/leaves}" th:classappend="${#strings.startsWith(path, '/leaves')} ? 'active'">Leave</a></li>
+    <li><a th:href="@{/attendance}" th:classappend="${#strings.startsWith(path, '/attendance')} ? 'active'">Attendance</a></li>
+    <li><a th:href="@{/payslips}" th:classappend="${#strings.startsWith(path, '/payslips')} ? 'active'">Payslips</a></li>
+    <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/employees}" th:classappend="${#strings.startsWith(path, '/admin/employees')} ? 'active'">People</a></li>
   </ul>
   <p class="side-note">Leave, attendance, and pay for the Salohi IT team.</p>
 </nav>
