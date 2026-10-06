@@ -1,6 +1,6 @@
 aws_region      = "ap-south-1"
-allowed_cidr    = "203.0.113.10/32"
-db_password     = "ReplaceWith12Chars"
+allowed_cidr    = "157.35.95.32/32"
+db_password     = "maple123456789"
 instance_type   = "m7i-flex.large"
 ssh_public_key  = ""
 root_volume_gb  = 30
