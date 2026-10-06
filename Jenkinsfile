@@ -76,11 +76,25 @@ pipeline {
                           cp "$TF_STATE_DIR/terraform.tfstate" terraform/terraform.tfstate
                         fi
 
+                        if [ -z "${TF_VAR_allowed_cidr:-}" ] || [ -z "${TF_VAR_db_password:-}" ]; then
+                          echo "allowed_cidr and db_password were not provided."
+                          echo "Set the ALLOWED_CIDR parameter and the hrms-db-password credential."
+                          exit 1
+                        fi
+                        umask 077
+                        cat > terraform/ci.auto.tfvars <<EOF
+aws_region     = "${TF_VAR_aws_region}"
+allowed_cidr   = "${TF_VAR_allowed_cidr}"
+db_password    = "${TF_VAR_db_password}"
+instance_type  = "${TF_VAR_instance_type}"
+ssh_public_key = ""
+EOF
+                        export TF_INPUT=false
                         terraform -chdir=terraform init -input=false
-                        terraform -chdir=terraform plan -input=false -out=tfplan
+                        terraform -chdir=terraform plan -input=false -var-file=ci.auto.tfvars -out=tfplan
                         terraform -chdir=terraform apply -input=false tfplan
                         cp terraform/terraform.tfstate "$TF_STATE_DIR/terraform.tfstate"
-                        rm -f terraform/tfplan
+                        rm -f terraform/tfplan terraform/ci.auto.tfvars
                     '''
                 }
             }
