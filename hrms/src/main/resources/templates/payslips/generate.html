@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head(${pageTitle})}"></head>
+<body>
+<div class="shell">
+  <aside th:replace="~{fragments :: nav}"></aside>
+  <main class="main">
+    <header class="top">
+      <div>
+        <p class="eyebrow">Payroll</p>
+        <h1 th:text="${pageTitle}">Generate payslip</h1>
+      </div>
+      <div class="who">
+        <span th:text="${currentUser.fullName()}">Name</span>
+        <form th:action="@{/logout}" method="post"><button class="linkish" type="submit">Sign out</button></form>
+      </div>
+    </header>
+    <div th:replace="~{fragments :: alerts}"></div>
+    <section class="panel">
+      <form th:object="${payslipForm}" th:action="@{/admin/payslips}" method="post">
+        <label for="employeeId">Employee</label>
+        <select id="employeeId" th:field="*{employeeId}" required>
+          <option value="">Choose</option>
+          <option th:each="person : ${people}" th:value="${person.id}"
+                  th:text="${person.employeeCode} + ' · ' + ${person.fullName}"></option>
+        </select>
+        <div class="grid-2">
+          <div>
+            <label for="month">Month</label>
+            <input id="month" type="number" min="1" max="12" th:field="*{month}" required/>
+          </div>
+          <div>
+            <label for="year">Year</label>
+            <input id="year" type="number" min="2020" max="2100" th:field="*{year}" required/>
+          </div>
+        </div>
+        <p class="hint">Net pay is basic + 40% HRA + 10% special allowance, minus 12% provident fund, ₹200 professional tax, and loss of pay for approved unpaid leave.</p>
+        <div class="row" style="margin-top:18px">
+          <button class="btn" type="submit">Generate</button>
+          <a class="btn secondary" th:href="@{/payslips}">Cancel</a>
+        </div>
+      </form>
+    </section>
+  </main>
+</div>
+</body>
+</html>

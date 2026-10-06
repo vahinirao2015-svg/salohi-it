@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head(${pageTitle})}"></head>
+<body>
+<div class="shell">
+  <aside th:replace="~{fragments :: nav}"></aside>
+  <main class="main">
+    <header class="top">
+      <div>
+        <p class="eyebrow">Directory</p>
+        <h1 th:text="${pageTitle}">Employee</h1>
+      </div>
+      <div class="who">
+        <span th:text="${currentUser.fullName()}">Name</span>
+        <form th:action="@{/logout}" method="post"><button class="linkish" type="submit">Sign out</button></form>
+      </div>
+    </header>
+    <div th:replace="~{fragments :: alerts}"></div>
+    <section class="panel">
+      <form th:object="${employeeForm}" th:action="@{${postUrl}}" method="post">
+        <div class="grid-2">
+          <div>
+            <label for="employeeCode">Employee code</label>
+            <input id="employeeCode" th:field="*{employeeCode}" required/>
+            <p class="field-error" th:if="${#fields.hasErrors('employeeCode')}" th:errors="*{employeeCode}"></p>
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" type="email" th:field="*{email}" required/>
+            <p class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+          </div>
+          <div>
+            <label for="firstName">First name</label>
+            <input id="firstName" th:field="*{firstName}" required/>
+            <p class="field-error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></p>
+          </div>
+          <div>
+            <label for="lastName">Last name</label>
+            <input id="lastName" th:field="*{lastName}" required/>
+            <p class="field-error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></p>
+          </div>
+          <div>
+            <label for="password" th:text="${editing} ? 'New password' : 'Password'">Password</label>
+            <input id="password" type="password" th:field="*{password}" autocomplete="new-password"/>
+            <p class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+          </div>
+          <div>
+            <label for="role">Role</label>
+            <select id="role" th:field="*{role}">
+              <option th:each="role : ${roles}" th:value="${role}" th:text="${role.label}">Employee</option>
+            </select>
+          </div>
+          <div>
+            <label for="department">Department</label>
+            <input id="department" th:field="*{department}" required/>
+            <p class="field-error" th:if="${#fields.hasErrors('department')}" th:errors="*{department}"></p>
+          </div>
+          <div>
+            <label for="designation">Designation</label>
+            <input id="designation" th:field="*{designation}" required/>
+            <p class="field-error" th:if="${#fields.hasErrors('designation')}" th:errors="*{designation}"></p>
+          </div>
+          <div>
+            <label for="phone">Phone</label>
+            <input id="phone" th:field="*{phone}"/>
+          </div>
+          <div>
+            <label for="joiningDate">Joining date</label>
+            <input id="joiningDate" type="date" th:field="*{joiningDate}" required/>
+            <p class="field-error" th:if="${#fields.hasErrors('joiningDate')}" th:errors="*{joiningDate}"></p>
+          </div>
+          <div>
+            <label for="basicSalary">Monthly basic (INR)</label>
+            <input id="basicSalary" type="number" min="1" step="0.01" th:field="*{basicSalary}" required/>
+            <p class="field-error" th:if="${#fields.hasErrors('basicSalary')}" th:errors="*{basicSalary}"></p>
+          </div>
+          <div>
+            <label for="annualLeaveBalance">Annual leave balance</label>
+            <input id="annualLeaveBalance" type="number" min="0" th:field="*{annualLeaveBalance}" required/>
+          </div>
+          <div>
+            <label for="active">Status</label>
+            <select id="active" th:field="*{active}">
+              <option th:value="true">Active</option>
+              <option th:value="false">Inactive</option>
+            </select>
+          </div>
+        </div>
+        <div class="row" style="margin-top:18px">
+          <button class="btn" type="submit" th:text="${editing} ? 'Save changes' : 'Create account'">Save</button>
+          <a class="btn secondary" th:href="@{/admin/employees}">Cancel</a>
+        </div>
+      </form>
+    </section>
+  </main>
+</div>
+</body>
+</html>

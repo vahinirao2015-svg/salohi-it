@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head(${pageTitle})}"></head>
+<body>
+<div class="shell">
+  <aside class="side" th:replace="~{fragments :: nav}"></aside>
+  <main class="main">
+    <header class="top">
+      <div>
+        <p class="eyebrow">Salohi IT</p>
+        <h1 th:text="${pageTitle}">Dashboard</h1>
+      </div>
+      <div class="who" th:if="${currentUser != null}">
+        <span th:text="${currentUser.fullName()}">Name</span>
+        <form th:action="@{/logout}" method="post"><button class="linkish" type="submit">Sign out</button></form>
+      </div>
+    </header>
+    <div th:replace="~{fragments :: alerts}"></div>
+    <section class="stats">
+      <article class="card stat" sec:authorize="hasRole('ADMIN')">
+        <p>Active people</p>
+        <strong th:text="${headcount}">0</strong>
+      </article>
+      <article class="card stat" sec:authorize="hasRole('ADMIN')">
+        <p>Leave waiting</p>
+        <strong th:text="${pendingLeaves}">0</strong>
+      </article>
+      <article class="card stat" sec:authorize="hasRole('ADMIN')">
+        <p>Checked in today</p>
+        <strong th:text="${presentToday}">0</strong>
+      </article>
+      <article class="card stat">
+        <p>Annual leave left</p>
+        <strong th:text="${leaveBalance}">0</strong>
+      </article>
+      <article class="card stat">
+        <p>Today</p>
+        <strong th:text="${checkedOut} ? 'Checked out' : (${checkedIn} ? 'Checked in' : 'Not in yet')">Not in yet</strong>
+      </article>
+      <article class="card stat">
+        <p th:text="${designation} + ' · ' + ${department}">Role</p>
+        <strong th:text="${latestPayslip == null ? 'No payslip' : @fmt.inr(latestPayslip.netPay)}">—</strong>
+      </article>
+    </section>
+    <section class="panel">
+      <div class="row">
+        <h2>Today’s desk</h2>
+        <a class="btn" th:href="@{/attendance}">Open attendance</a>
+      </div>
+      <p>Casual and earned leave share the annual balance. Unpaid leave reduces the payslip for that month. Records stay in PostgreSQL on the data volume.</p>
+    </section>
+  </main>
+</div>
+</body>
+</html>

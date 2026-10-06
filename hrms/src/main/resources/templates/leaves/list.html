@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head(${pageTitle})}"></head>
+<body>
+<div class="shell">
+  <aside th:replace="~{fragments :: nav}"></aside>
+  <main class="main">
+    <header class="top">
+      <div>
+        <p class="eyebrow">Time away</p>
+        <h1 th:text="${pageTitle}">Leave</h1>
+      </div>
+      <div class="who">
+        <span th:text="${currentUser.fullName()}">Name</span>
+        <form th:action="@{/logout}" method="post"><button class="linkish" type="submit">Sign out</button></form>
+      </div>
+    </header>
+    <div th:replace="~{fragments :: alerts}"></div>
+    <section class="panel">
+      <div class="row">
+        <h2 th:text="'Annual balance: ' + ${balance} + ' days'">Balance</h2>
+        <a class="btn" th:href="@{/leaves/new}">Request leave</a>
+      </div>
+      <p class="empty" th:if="${#lists.isEmpty(requests)}">No leave requests yet.</p>
+      <table th:if="${!#lists.isEmpty(requests)}">
+        <thead>
+        <tr>
+          <th>Person</th><th>Type</th><th>Dates</th><th>Reason</th><th>Status</th><th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="leave : ${requests}">
+          <td th:text="${leave.employee.fullName}">Name</td>
+          <td th:text="${leave.leaveType.label}">Casual</td>
+          <td>
+            <span th:text="${#temporals.format(leave.startDate, 'dd MMM yyyy')}">start</span>
+            –
+            <span th:text="${#temporals.format(leave.endDate, 'dd MMM yyyy')}">end</span>
+          </td>
+          <td th:text="${leave.reason}">Reason</td>
+          <td><span class="badge" th:classappend="${leave.status}" th:text="${leave.status.label}">Pending</span></td>
+          <td class="actions" sec:authorize="hasRole('ADMIN')" th:if="${leave.status.name() == 'PENDING'}">
+            <form class="inline" th:action="@{/admin/leaves/{id}/approve(id=${leave.id})}" method="post">
+              <button class="btn" type="submit">Approve</button>
+            </form>
+            <form class="inline" th:action="@{/admin/leaves/{id}/reject(id=${leave.id})}" method="post">
+              <button class="btn secondary" type="submit">Reject</button>
+            </form>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>
+</body>
+</html>

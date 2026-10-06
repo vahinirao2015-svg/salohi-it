@@ -1,0 +1,7 @@
+aws_region      = "ap-south-1"
+allowed_cidr    = "203.0.113.10/32"
+db_password     = "ReplaceWith12Chars"
+instance_type   = "m7i-flex.large"
+ssh_public_key  = ""
+root_volume_gb  = 30
+data_volume_gb  = 50

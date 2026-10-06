@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head(${pageTitle})}"></head>
+<body>
+<div class="shell">
+  <aside th:replace="~{fragments :: nav}"></aside>
+  <main class="main">
+    <header class="top">
+      <div>
+        <p class="eyebrow">Presence</p>
+        <h1 th:text="${pageTitle}">Attendance</h1>
+      </div>
+      <div class="who">
+        <span th:text="${currentUser.fullName()}">Name</span>
+        <form th:action="@{/logout}" method="post"><button class="linkish" type="submit">Sign out</button></form>
+      </div>
+    </header>
+    <div th:replace="~{fragments :: alerts}"></div>
+    <section class="panel">
+      <div class="row">
+        <div class="actions">
+          <form th:action="@{/attendance/check-in}" method="post">
+            <button class="btn" type="submit" th:disabled="${myCheckIn != null}">Check in</button>
+          </form>
+          <form th:action="@{/attendance/check-out}" method="post">
+            <button class="btn clay" type="submit" th:disabled="${myCheckIn == null or myCheckOut != null}">Check out</button>
+          </form>
+        </div>
+        <form method="get" th:action="@{/attendance}" sec:authorize="hasRole('ADMIN')">
+          <label for="day">Team day</label>
+          <input id="day" type="date" name="day" th:value="${#temporals.format(day, 'yyyy-MM-dd')}"/>
+          <button class="btn secondary" type="submit">Show</button>
+        </form>
+      </div>
+      <p class="empty" th:if="${#lists.isEmpty(rows)}">No attendance recorded for this view.</p>
+      <table th:if="${!#lists.isEmpty(rows)}">
+        <thead>
+        <tr>
+          <th>Person</th><th>Date</th><th>Check in</th><th>Check out</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="row : ${rows}">
+          <td th:text="${row.employee.fullName}">Name</td>
+          <td th:text="${#temporals.format(row.workDate, 'dd MMM yyyy')}">date</td>
+          <td th:text="${row.checkIn == null ? '—' : #temporals.format(row.checkIn, 'HH:mm')}">in</td>
+          <td th:text="${row.checkOut == null ? '—' : #temporals.format(row.checkOut, 'HH:mm')}">out</td>
+        </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>
+</body>
+</html>

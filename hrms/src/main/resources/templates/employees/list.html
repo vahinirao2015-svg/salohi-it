@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head(${pageTitle})}"></head>
+<body>
+<div class="shell">
+  <aside th:replace="~{fragments :: nav}"></aside>
+  <main class="main">
+    <header class="top">
+      <div>
+        <p class="eyebrow">Directory</p>
+        <h1 th:text="${pageTitle}">People</h1>
+      </div>
+      <div class="who">
+        <span th:text="${currentUser.fullName()}">Name</span>
+        <form th:action="@{/logout}" method="post"><button class="linkish" type="submit">Sign out</button></form>
+      </div>
+    </header>
+    <div th:replace="~{fragments :: alerts}"></div>
+    <section class="panel">
+      <div class="row">
+        <h2>Team</h2>
+        <a class="btn" th:href="@{/admin/employees/new}">Add employee</a>
+      </div>
+      <p class="empty" th:if="${#lists.isEmpty(people)}">No employees yet.</p>
+      <table th:if="${!#lists.isEmpty(people)}">
+        <thead>
+        <tr>
+          <th>Code</th><th>Name</th><th>Role</th><th>Department</th><th>Salary</th><th>Leave</th><th>Status</th><th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="person : ${people}">
+          <td th:text="${person.employeeCode}">SAL-001</td>
+          <td>
+            <strong th:text="${person.fullName}">Name</strong><br/>
+            <span th:text="${person.email}">email</span>
+          </td>
+          <td th:text="${person.role.label}">Admin</td>
+          <td>
+            <span th:text="${person.department}">HR</span><br/>
+            <span th:text="${person.designation}">Manager</span>
+          </td>
+          <td th:text="${@fmt.inr(person.basicSalary)}">₹0</td>
+          <td th:text="${person.annualLeaveBalance}">18</td>
+          <td>
+            <span class="badge" th:classappend="${person.active} ? 'on' : 'off'" th:text="${person.active} ? 'Active' : 'Inactive'">Active</span>
+          </td>
+          <td class="actions">
+            <a class="btn secondary" th:href="@{/admin/employees/{id}/edit(id=${person.id})}">Edit</a>
+            <form class="inline" th:if="${person.active and person.id != currentUser.id()}" th:action="@{/admin/employees/{id}/deactivate(id=${person.id})}" method="post">
+              <button class="btn danger" type="submit">Deactivate</button>
+            </form>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>
+</body>
+</html>

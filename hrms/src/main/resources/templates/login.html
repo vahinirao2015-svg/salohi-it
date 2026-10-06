@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Sign in · Salohi IT</title>
+  <link rel="icon" th:href="@{/favicon.svg}"/>
+  <link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body>
+<div class="login-wrap">
+  <section class="login-story">
+    <div class="brand">
+      <div class="mark">Si</div>
+      <div>
+        <strong>Salohi IT</strong>
+        <span>Human resources</span>
+      </div>
+    </div>
+    <div>
+      <p class="eyebrow" style="color:#e7c27a">HRMS portal</p>
+      <h1>The people desk, kept in one place.</h1>
+      <p>Request leave, mark attendance, and open payslips. Administrators manage the team from the same portal.</p>
+      <div class="local-clock" aria-live="polite">
+        <span class="local-clock-time" id="local-time">--:--:--</span>
+        <span class="local-clock-date" id="local-date">Local time</span>
+      </div>
+    </div>
+  </section>
+  <section class="login-panel">
+    <form class="card login-card" th:action="@{/login}" method="post">
+      <h2>Sign in</h2>
+      <p class="alert bad" th:if="${param.error}">The email or password did not match an active account.</p>
+      <p class="alert ok" th:if="${param.logout}">You are signed out.</p>
+      <label for="username">Email</label>
+      <input id="username" name="username" type="email" autocomplete="username" required/>
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required/>
+      <div class="row" style="margin-top:18px">
+        <button class="btn" type="submit">Enter portal</button>
+      </div>
+      <p class="hint">First-run accounts: admin@salohi.it, arjun@salohi.it, meera@salohi.it. Password Salohi@123. Change these after sign-in.</p>
+    </form>
+  </section>
+</div>
+<script>
+  (function () {
+    var timeEl = document.getElementById("local-time");
+    var dateEl = document.getElementById("local-date");
+    var timeFmt = new Intl.DateTimeFormat(undefined, {
+      hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true
+    });
+    var dateFmt = new Intl.DateTimeFormat(undefined, {
+      weekday: "long", day: "numeric", month: "long", year: "numeric"
+    });
+    function tick() {
+      var now = new Date();
+      timeEl.textContent = timeFmt.format(now);
+      dateEl.textContent = dateFmt.format(now);
+    }
+    tick();
+    setInterval(tick, 1000);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head(${pageTitle})}"></head>
+<body>
+<div class="shell">
+  <aside class="no-print" th:replace="~{fragments :: nav}"></aside>
+  <main class="main">
+    <header class="top no-print">
+      <div>
+        <p class="eyebrow">Payroll</p>
+        <h1>Payslip</h1>
+      </div>
+      <div class="who">
+        <button class="btn secondary" type="button" onclick="window.print()">Print</button>
+      </div>
+    </header>
+    <article class="card slip">
+      <header>
+        <div>
+          <p class="eyebrow">Salohi IT</p>
+          <h2 th:text="${slip.employee.fullName}">Name</h2>
+          <p th:text="${slip.employee.designation} + ' · ' + ${slip.employee.department}">Role</p>
+          <p th:text="${slip.employee.employeeCode}">SAL-002</p>
+        </div>
+        <div>
+          <strong th:text="${@fmt.month(slip.payMonth)} + ' ' + ${slip.payYear}">October 2026</strong>
+          <p th:text="'Generated ' + ${#temporals.format(slip.generatedAt, 'dd MMM yyyy HH:mm')}">date</p>
+        </div>
+      </header>
+      <table class="lines">
+        <tbody>
+        <tr><td>Basic salary</td><td th:text="${@fmt.inr(slip.basicSalary)}">₹0</td></tr>
+        <tr><td>House rent allowance (40%)</td><td th:text="${@fmt.inr(slip.houseRentAllowance)}">₹0</td></tr>
+        <tr><td>Special allowance (10%)</td><td th:text="${@fmt.inr(slip.specialAllowance)}">₹0</td></tr>
+        <tr><td>Gross pay</td><td th:text="${@fmt.inr(slip.grossPay)}">₹0</td></tr>
+        <tr><td>Provident fund (12% of basic)</td><td th:text="${@fmt.inr(slip.providentFund)}">₹0</td></tr>
+        <tr><td>Professional tax</td><td th:text="${@fmt.inr(slip.professionalTax)}">₹0</td></tr>
+        <tr><td th:text="'Loss of pay (' + ${slip.unpaidDays} + ' unpaid days)'">Loss of pay</td><td th:text="${@fmt.inr(slip.lossOfPay)}">₹0</td></tr>
+        <tr class="total"><td>Net pay</td><td th:text="${@fmt.inr(slip.netPay)}">₹0</td></tr>
+        </tbody>
+      </table>
+    </article>
+  </main>
+</div>
+</body>
+</html>

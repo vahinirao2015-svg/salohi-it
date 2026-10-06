@@ -1,0 +1,20 @@
+server:
+  port: ${SERVER_PORT:8081}
+
+spring:
+  application:
+    name: salohi-hrms
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/hrms}
+    username: ${SPRING_DATASOURCE_USERNAME:hrms}
+    password: ${SPRING_DATASOURCE_PASSWORD:hrms_dev_change_me}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate.jdbc.time_zone: Asia/Kolkata
+  flyway:
+    enabled: true
+
+server.error.include-message: never

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head(${pageTitle})}"></head>
+<body>
+<div class="shell">
+  <aside th:replace="~{fragments :: nav}"></aside>
+  <main class="main">
+    <header class="top">
+      <div>
+        <p class="eyebrow">Payroll</p>
+        <h1 th:text="${pageTitle}">Payslips</h1>
+      </div>
+      <div class="who">
+        <span th:text="${currentUser.fullName()}">Name</span>
+        <form th:action="@{/logout}" method="post"><button class="linkish" type="submit">Sign out</button></form>
+      </div>
+    </header>
+    <div th:replace="~{fragments :: alerts}"></div>
+    <section class="panel">
+      <div class="row">
+        <h2>Issued slips</h2>
+        <a class="btn" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/payslips/new}">Generate payslip</a>
+      </div>
+      <p class="empty" th:if="${#lists.isEmpty(slips)}">No payslips yet.</p>
+      <table th:if="${!#lists.isEmpty(slips)}">
+        <thead>
+        <tr>
+          <th>Person</th><th>Period</th><th>Net pay</th><th>Unpaid days</th><th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="slip : ${slips}">
+          <td th:text="${slip.employee.fullName}">Name</td>
+          <td th:text="${@fmt.month(slip.payMonth)} + ' ' + ${slip.payYear}">Month</td>
+          <td th:text="${@fmt.inr(slip.netPay)}">₹0</td>
+          <td th:text="${slip.unpaidDays}">0</td>
+          <td><a th:href="@{/payslips/{id}(id=${slip.id})}">Open</a></td>
+        </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>
+</body>
+</html>

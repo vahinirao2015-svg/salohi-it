@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(pageTitle)">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title th:text="${pageTitle} + ' · Salohi IT'">Salohi IT</title>
+  <link rel="icon" th:href="@{/favicon.svg}"/>
+  <link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body>
+<nav class="side" th:fragment="nav">
+  <div class="brand">
+    <div class="mark">Si</div>
+    <div>
+      <strong>Salohi IT</strong>
+      <span>People desk</span>
+    </div>
+  </div>
+  <ul class="menu">
+    <li><a th:href="@{/}" th:classappend="${#request.servletPath == '/'} ? 'active'">Dashboard</a></li>
+    <li><a th:href="@{/leaves}" th:classappend="${#strings.startsWith(#request.servletPath, '/leaves')} ? 'active'">Leave</a></li>
+    <li><a th:href="@{/attendance}" th:classappend="${#strings.startsWith(#request.servletPath, '/attendance')} ? 'active'">Attendance</a></li>
+    <li><a th:href="@{/payslips}" th:classappend="${#strings.startsWith(#request.servletPath, '/payslips')} ? 'active'">Payslips</a></li>
+    <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/employees}" th:classappend="${#strings.startsWith(#request.servletPath, '/admin/employees')} ? 'active'">People</a></li>
+  </ul>
+  <p class="side-note">Leave, attendance, and pay for the Salohi IT team.</p>
+</nav>
+<div th:fragment="alerts">
+  <p class="alert ok" th:if="${message}" th:text="${message}"></p>
+  <p class="alert bad" th:if="${error}" th:text="${error}"></p>
+</div>
+</body>
+</html>
