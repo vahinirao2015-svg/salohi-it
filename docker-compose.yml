@@ -1,4 +1,4 @@
-# Local database for the HRMS portal. Data stays in the named volume.
+# Local database and the portal. Inside the app container, localhost is not the database.
 services:
   db:
     image: postgres:16
@@ -15,6 +15,20 @@ services:
       interval: 5s
       timeout: 5s
       retries: 12
+
+  hrms-app:
+    build: ./hrms
+    image: hrms-app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/hrms
+      SPRING_DATASOURCE_USERNAME: hrms
+      SPRING_DATASOURCE_PASSWORD: hrms_dev_change_me
+      SERVER_PORT: "8081"
+    ports:
+      - "8081:8081"
 
 volumes:
   hrms_pgdata:
